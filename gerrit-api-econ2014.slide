@@ -1,0 +1,88 @@
+Extending Gerrit
+A Look at the Gerrit Plugin API
+
+Shawn Pearce
+Google
+
+Ian Bull
+EclipseSource
+
+* Gerrit
+
+- *Web*based* code-review system for projects using *Git*
+- Makes reviews easier through a *side-by-side* comparison view and inline *comments*
+- Simplifies project management by allowing authorized users to submit changes to the master branch
+
+* Gerrit in the Wild
+- Android
+- Eclipse
+- LibreOffice
+- Wikimedia
+- Chromium
+
+* Plugins and Extensions
+- Functionality can be *extended* by installing *plugins* and *extensions*
+- Plugins are tightly coupled with full access to all internals
+- Extensions have *limited* *visibility* to internals, *compatible* across a wider range of versions
+
+* Two APIs
+- gerrit-extension-api.jar
+- gerrit-plugin-api.jar
+
+* Tools for Building Plugins
+- Maven
+- Install the API library into your local maven repository
+ buck build api
+ buck build api_install
+- Eclipse
+- Eclipse project setup tool
+ tools/eclipse/project.py
+- Plugins directory is scanned and loaded (hot deploy)
+
+* Anatomy of a Plugin
+- Manifest
+- API Type
+- Registration
+- Name
+- Reload Mode
+- Classpath
+
+* Manifest
+- Manifest describes te content of the plug-in
+- Descriptive headers
+- API Type: If the tightly coupled 'plug-in' API is being used, it must be specified
+- Explicit module registration must be specified
+- Maven based builds can generate the manifest from description in the pom.xml
+
+* Explicit Registration
+- Up to three modules can be registered in the manifest
+- *Gerrit-Module*: Supplies bindings to the core server
+- *Gerrit-SshModule*: Supplies SSH Commands to the SSH server
+- *Gerrit-HttpModule*: Supplies servlets and filters to the HTTP Server
+
+* SSH Modules
+- Plugins may provide commands that can be accessed via SSH
+- Guice registration
+- No Guice registration
+ $ ssh -p 29418 review.example.com helloworld print
+
+* HTTP Modules
+
+* UI Extension
+- Change Screen
+- Project Info Screen
+- Top Menu Extension
+- Add Your Own Screen
+- Setting Screen
+
+* JS API
+
+* Events and Notifications
+
+* Pro Tips
+- Init Step
+- Configuration
+-- Global or Private (own)
+- Capabilities
+- Remote debugging plugins (?)
+- Strategies for testing plugins (?)
