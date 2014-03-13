@@ -31,6 +31,7 @@
 						<manifestEntries>
 							<Gerrit-PluginName>tutorialPlugin</Gerrit-PluginName>
 							<Gerrit-SshModule>com.googlesource.gerrit.plugins.tutorialplugin.SshModule</Gerrit-SshModule>
+							<Gerrit-Module>com.googlesource.gerrit.plugins.tutorialplugin.Module</Gerrit-Module>
 							<Implementation-Vendor>Gerrit Code Review</Implementation-Vendor>
 							<Implementation-URL>http://code.google.com/p/gerrit/</Implementation-URL>
 							<Implementation-Title>${Gerrit-ApiType} ${project.artifactId}</Implementation-Title>
