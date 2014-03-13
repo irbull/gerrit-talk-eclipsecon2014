@@ -16,6 +16,7 @@ package com.googlesource.gerrit.plugins.tutorialplugin;
 
 import com.google.gerrit.extensions.registration.DynamicSet;
 import com.google.gerrit.extensions.systemstatus.MessageOfTheDay;
+import com.google.gerrit.extensions.webui.TopMenu;
 import com.google.inject.AbstractModule;
 
 class Module extends AbstractModule {
@@ -23,5 +24,6 @@ class Module extends AbstractModule {
   @Override
   protected void configure() {
     DynamicSet.bind(binder(), MessageOfTheDay.class).to(EclipseConMessage.class);
+    DynamicSet.bind(binder(), TopMenu.class).to(EclipseConTopLevelMenu.class);
   }
 }
