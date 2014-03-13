@@ -1,0 +1,14 @@
+MODULE = 'com.googlesource.gerrit.plugins.testplugin'
+
+gerrit_plugin(
+  name = 'testplugin',
+  srcs = glob(['src/main/java/**/*.java']),
+  resources = glob(['src/main/**/*']),
+  gwt_module = MODULE,
+  manifest_entries = [
+    'Gerrit-PluginName: testplugin',
+    'Gerrit-Module: com.googlesource.gerrit.plugins.cookbook.Module',
+    'Gerrit-HttpModule: com.googlesource.gerrit.plugins.cookbook.HttpModule',
+    'Gerrit-SshModule: com.googlesource.gerrit.plugins.cookbook.SshModule',
+  ]
+)
