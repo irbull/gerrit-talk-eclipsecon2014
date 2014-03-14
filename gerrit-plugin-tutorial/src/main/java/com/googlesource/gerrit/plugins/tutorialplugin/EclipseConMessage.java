@@ -4,6 +4,11 @@ import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.extensions.systemstatus.MessageOfTheDay;
 import com.google.inject.Inject;
 
+import org.ocpsoft.prettytime.PrettyTime;
+
+import java.lang.management.ManagementFactory;
+import java.util.Date;
+
 public class EclipseConMessage extends MessageOfTheDay {
 
   private String pluginName;
@@ -17,6 +22,9 @@ public class EclipseConMessage extends MessageOfTheDay {
   public String getHtmlMessage() {
     StringBuilder result = new StringBuilder();
     result.append("<H1>Welcome to EclipseCon 2014</H1>");
+    Date startTime = new Date(ManagementFactory.getRuntimeMXBean().getStartTime());
+    String prettyPrintedTime = new PrettyTime(new Date()).format(startTime);
+    result.append("The server was started about " + prettyPrintedTime + "<br>");
     result.append("Contributed by <i>" + pluginName + "</i>.");
     return result.toString();
   }
