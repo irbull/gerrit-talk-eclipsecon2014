@@ -25,19 +25,34 @@ EclipseSource
 - Plugins are tightly coupled with full access to all internals
 - Extensions have *limited* *visibility* to internals, *compatible* across a wider range of versions
 
+* A Tail of Two Work Item Trackers
+- Eclipse uses Bugzilla to plan, discuss, design and track work items
+- Eclipse uses Gerrit to review, discuss, design and track patch-sets
+- In many cases, the discussion is fragmented between these two systems
+
+We don't have any good answers, but we'll work through a plug-in that
+_might_ help.
+- We'll use this talk on the Gerrit API to design a Gerrit plugin that integrates buzilla with Gerrit.
+- In Gerrit, enter a Bug Number and it will automatically create an empty commit from which you can start working.
+
 * Two APIs
 - gerrit-extension-api.jar
 - gerrit-plugin-api.jar
 
 * Tools for Building Plugins
-- Maven
+Maven
+Buck
+
 - Install the API library into your local maven repository
  buck build api
  buck build api_install
-- Eclipse
+
+Eclipse
+
 - Eclipse project setup tool
  tools/eclipse/project.py
-- Plugins directory is scanned and loaded (hot deploy)
+
+Plugins directory is scanned and loaded (hot deploy)
 
 * Anatomy of a Plugin
 - Manifest
@@ -60,13 +75,107 @@ EclipseSource
 - *Gerrit-SshModule*: Supplies SSH Commands to the SSH server
 - *Gerrit-HttpModule*: Supplies servlets and filters to the HTTP Server
 
-* SSH Modules
-- Plugins may provide commands that can be accessed via SSH
-- Guice registration
-- No Guice registration
- $ ssh -p 29418 review.example.com helloworld print
+* Extensions
+Supports a limited number of integration points
+- Limited interaction with Projects
+- Limited interaction with Reviews (changes)
+- Event listening
+- Rest API
+- System Status
+- Basic UI integration (Top level menu, message of the day)
+
+* Your First Gerrit Extension
+- Use a Gerrit-Module to register the API
+- Create an instance of MessageOfTheDay and TopMenu to contribute extensions
+- Use _dependency_injection to get the Extension's name
+ class Module extends AbstractModule {
+   @Override
+   protected void configure() {
+     DynamicSet.bind(binder(), MessageOfTheDay.class).to(EclipseConMessage.class);
+     DynamicSet.bind(binder(), TopMenu.class).to(EclipseConTopLevelMenu.class);
+   }
+ }
+
+ public class EclipseConMessage extends MessageOfTheDay {
+
+  private String pluginName;
+
+  @Inject
+  public EclipseConMessage(@PluginName String pluginName) {
+    this.pluginName = pluginName;
+  }
+
+* Print the message
+ @Override
+ public String getHtmlMessage() {
+  StringBuilder result = new StringBuilder();
+  result.append("<H1>Welcome to EclipseCon 2014</H1>");
+  Date startTime = new Date(ManagementFactory.getRuntimeMXBean().getStartTime());
+  String prettyPrintedTime = new PrettyTime(new Date()).format(startTime);
+  result.append("The server was started about " + prettyPrintedTime + "<br>");
+  result.append("Contributed by <i>" + pluginName + "</i>.");
+  return result.toString();
+  }
+ }
+
+
+
+* Deploy the Plug-in
+- Track problems by watching the logs in <gerrit_install>/logs directory
+- Copy the plugin to the <gerrit_install>/plugins directory
+- Copy the required libraries to the <gerrit_install>/libs directory
+.image images/deploy0.png
+
+* Guice Dependency Injection
+- Gerrit uses Guice dependency injection
+- Most API types are accepted as parameters to your constructors
+- TODO: Tips for discovering and using dependency injection
 
 * HTTP Modules
+- Create a plugin that will list all the projects, and the number of open reviews against each
+
+
+
+* SSH Modules
+- Plugins may provide commands that can be accessed via SSH
+- Register the commands using Guice or via a module
+ $ ssh irbull@localhost -p 29418 tutorialPlugin uptime
+
+* Your First Gerrit Plug-in
+- Create a plugin that will print the uptime for the gerrit server over ssh
+- Use PrettyTime to pretty print the uptime
+
+ @CommandMetaData(name = "uptime", description = "Print server uptime")
+ public class PrintUptime extends SshCommand {
+   @Inject
+   PrintUptime() {
+   }
+   @Override
+   protected void run() {
+       Date startTime = new Date(ManagementFactory.getRuntimeMXBean().getStartTime());
+       String prettyPrintedTime = new PrettyTime(new Date()).format(startTime);
+       stdout.println("The Gerrit server started about " + prettyPrintedTime );
+   }
+ }
+
+- Register the ssh command
+
+ class SshModule extends PluginCommandModule {
+  @Override
+  protected void configureCommands() {
+    command(PrintUptime.class);
+  }
+ }
+
+
+* Deploy the Plug-in
+- Track problems by watching the logs in <gerrit_install>/logs directory
+- Copy the plugin to the <gerrit_install>/plugins directory
+- Copy the required libraries to the <gerrit_install>/libs directory
+.image images/deploy1.png
+
+
+
 
 * UI Extension
 - Change Screen
@@ -74,6 +183,8 @@ EclipseSource
 - Top Menu Extension
 - Add Your Own Screen
 - Setting Screen
+
+* Working with the DB
 
 * JS API
 
