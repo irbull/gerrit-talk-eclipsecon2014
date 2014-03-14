@@ -39,6 +39,7 @@ import java.util.Collections;
 
 @CommandMetaData(name = "createChange", description = "Creates a new change")
 public class CreateChange extends SshCommand {
+  private static final String DUMMY_COMMIT_MESSAGE = "Dummy commit";
   private static final String BRANCH = "refs/heads/master";
   private static final String PARENT_REF = "master";
 
@@ -69,8 +70,7 @@ public class CreateChange extends SshCommand {
     try {
       stdout.println("Creating workitem on project: " + projectName);
       Id id = new Change.Id(db.nextChangeId());
-      Iterable<NameKey> byName = projectCache.byName(projectName);
-      NameKey projectNameKey = byName.iterator().next();
+      NameKey projectNameKey = getProjectNameKey();
       Repository repository = repoManager.openRepository(projectNameKey);
       RevWalk revWalk = new RevWalk(repository);
       Ref ref = repository.getRef(PARENT_REF);
@@ -78,7 +78,7 @@ public class CreateChange extends SshCommand {
 
       ObjectInserter newObjectInserter = repository.newObjectInserter();
       CommitBuilder builder = buildCommit(id, ref, commit);
-      String changeID = createChangeID(newObjectInserter, builder);
+      String changeID = createChangeIDFromCommit(newObjectInserter, builder);
       RevCommit newCommit = insertCommit(id, repository, revWalk, builder, changeID);
 
       RefControl ctrl = createRefControl(projectNameKey);
@@ -92,16 +92,22 @@ public class CreateChange extends SshCommand {
     }
   }
 
+  private NameKey getProjectNameKey() {
+    Iterable<NameKey> byName = projectCache.byName(projectName);
+    NameKey projectNameKey = byName.iterator().next();
+    return projectNameKey;
+  }
+
   private RevCommit insertCommit(Id id, Repository repository, RevWalk revWalk,
       CommitBuilder builder, String changeID) throws IOException,
       MissingObjectException, IncorrectObjectTypeException {
-    builder.setMessage("Dummy commit\n\n" + "Change-Id: " + changeID);
+    builder.setMessage(DUMMY_COMMIT_MESSAGE + "\n\n" + "Change-Id: " + changeID);
     ObjectId insert = repository.newObjectInserter().insert(builder);
     RevCommit newCommit = revWalk.parseCommit(insert);
     return newCommit;
   }
 
-  private String createChangeID(ObjectInserter newObjectInserter,
+  private String createChangeIDFromCommit(ObjectInserter newObjectInserter,
       CommitBuilder builder) throws UnsupportedEncodingException {
     byte[] data = builder.build();
     String changeID = createChangeID(newObjectInserter, data);
@@ -120,7 +126,7 @@ public class CreateChange extends SshCommand {
     builder.setTreeId(commit.getTree().getId());
     builder.setCommitter(new PersonIdent("ian", "irbull@gmail.com"));
     builder.setAuthor(new PersonIdent("ian", "irbull@gmail.com"));
-    builder.setMessage("A test commit message " + id );
+    builder.setMessage(DUMMY_COMMIT_MESSAGE);
     return builder;
   }
 
