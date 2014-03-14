@@ -22,5 +22,6 @@ class SshModule extends PluginCommandModule {
   @Override
   protected void configureCommands() {
     command(PrintUptime.class);
+    command(CreateChange.class);
   }
 }
