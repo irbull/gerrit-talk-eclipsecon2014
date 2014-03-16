@@ -11,6 +11,9 @@ EclipseSource
 
 - *Web*based* code-review system for projects using *Git*
 - Makes reviews easier through a *side-by-side* comparison view and inline *comments*
+
+.image images/sidebyside.png 338 726
+
 - Simplifies project management by allowing authorized users to submit changes to the master branch
 
 * Gerrit in the Wild
