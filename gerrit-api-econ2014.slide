@@ -7,7 +7,7 @@ Google
 Ian Bull
 EclipseSource
 
-* Gerrit
+* Gerrit Code Review
 
 - *Web*based* code-review system for projects using *Git*
 - Makes reviews easier through a *side-by-side* comparison view and inline *comments*
@@ -16,12 +16,12 @@ EclipseSource
 
 - Simplifies project management by allowing authorized users to submit changes to the master branch
 
-* Gerrit in the Wild
+* Gerrit in the wild
 - Android
 - Eclipse
 - LibreOffice
 - Wikimedia
-- Chromium
+- Chromium OS
 
 * Plugins and Extensions
 - Functionality can be *extended* by installing *plugins* and *extensions*
