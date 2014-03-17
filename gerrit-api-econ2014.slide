@@ -148,16 +148,16 @@ Supports a limited number of integration points
 Gerrit uses Guice dependency injection
 Most API types are accepted as parameters to your constructors
 
-- *@PluginName* Name of the plugin
-- *@CanonicalWebUrl*
-- *ReviewDB* Root entry to the Gerrit Database ORM
-- *GitRepositoryManager* Manages Git repositories for Gerrit
-- *IdentifiedUser* Currently authenticated user
+- `@PluginName`String` - name of the plugin
+- `@CanonicalWebUrl`String` - server URL
+- `ReviewDB` - connection to the Gerrit database ORM
+- `GitRepositoryManager` - local Git repositories managed by Gerrit
+- `IdentifiedUser` - currently authenticated user
 
- public class CreateWorkItemImpl implements CreateWorkItemService {
+ public class CreateWorkItemImpl {
   @Inject
   CreateWorkItemImpl(ReviewDb db,
-      final GitRepositoryManager repoManager,
+      GitRepositoryManager repoManager,
       ... ) {
     this.db = db;
     this.repoManager = repoManager
