@@ -96,11 +96,11 @@ Up to three modules can be registered in the manifest
 
 
 * Classpath
-A few notes about Classpaths
 
-- Each plugin is loaded into its own Classloader
-- A Plugin inherits the Java Runtime and Gerrit API
-- Plugins are loaded from a single Jar, dependenies must be included, or placed in the libs/ directory
+- Each plugin is loaded into its own ClassLoader
+- Plugin inherits the Java Runtime and Gerrit API
+- Plugins are loaded from a single JAR
+- Dependencies must be included or placed in server's `libs/` directory
 
 * Extensions
 Supports a limited number of integration points
