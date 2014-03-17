@@ -16,6 +16,7 @@ package com.googlesource.gerrit.plugins.tutorialplugin;
 
 import static com.google.gerrit.server.project.ProjectResource.PROJECT_KIND;
 
+import com.google.gerrit.common.ChangeListener;
 import com.google.gerrit.extensions.annotations.Exports;
 import com.google.gerrit.extensions.config.CapabilityDefinition;
 import com.google.gerrit.extensions.registration.DynamicSet;
@@ -30,6 +31,7 @@ class Module extends AbstractModule {
   protected void configure() {
     DynamicSet.bind(binder(), MessageOfTheDay.class).to(EclipseConMessage.class);
     DynamicSet.bind(binder(), TopMenu.class).to(EclipseConTopLevelMenu.class);
+    DynamicSet.bind(binder(), ChangeListener.class).to(MyChangeListener.class);
     bind(CreateWorkItemService.class).to(CreateWorkItemImpl.class);
     install(new RestApiModule() {
       @Override
