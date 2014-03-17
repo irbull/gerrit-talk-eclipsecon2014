@@ -276,7 +276,7 @@ Plugins can provide commands that can be access via SSH
    @Override
    protected void configureCommands() {
      command(PrintUptime.class);
-     command(CreateWorkItemSSHCmd.class);
+     command(CreateChange.class);
    }
  }
 
