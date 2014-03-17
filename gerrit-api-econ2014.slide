@@ -70,21 +70,19 @@ Manifest describes the content of the plugin
 - If modules are explicitly registered, they must be specified
 - Maven and Buck based builds will generate the Manifest for you
  Manifest-Version: 1.0
+
+ Implementation-Vendor: Gerrit Code Review
  Implementation-Title: plugin tutorial-plugin
  Implementation-Version: 1.0-SNAPSHOT
- Built-By: irbull
- Created-By: Apache Maven 3.2.1
  Implementation-URL: http://code.google.com/p/gerrit/
- Gerrit-ApiVersion: 2.9-SNAPSHOT
- Gerrit-HttpModule: com.googlesource.gerrit.plugins.tutorialplugin.HttpModule
+
  Gerrit-ApiType: plugin
- Implementation-Vendor: Gerrit Code Review
+ Gerrit-ApiVersion: 2.9-SNAPSHOT
  Gerrit-PluginName: tutorialPlugin
- Build-Jdk: 1.7.0_25
+
  Gerrit-Module: com.googlesource.gerrit.plugins.tutorialplugin.Module
+ Gerrit-HttpModule: com.googlesource.gerrit.plugins.tutorialplugin.HttpModule
  Gerrit-SshModule: com.googlesource.gerrit.plugins.tutorialplugin.SshModule
-
-
 
 * Explicit Registration
 Up to three modules can be registered in the manifest
