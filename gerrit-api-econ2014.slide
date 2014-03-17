@@ -25,6 +25,11 @@ irbull@eclipsesource.com
 - Wikimedia
 - Chromium OS
 
+Gerrit uses JGit to interface with Git
+
+- JGit is an implementation of Git written entirely in Java
+- [[http://eclipse.org/jgit]]
+
 * A Tale of Two Systems
 - Eclipse uses Bugzilla to plan, *discuss*, *design* and *track* work items
 - Eclipse uses Gerrit to review, *discuss*, *design* and *track* patch-sets
@@ -184,25 +189,6 @@ Create a _Change_Request_ with an initial commit
     bind(CreateWorkItemService.class).to(CreateWorkItemImpl.class);
   }
  }
-
-* Working with JGit
-Gerrit uses JGit to interface with Git
-
-- JGit is an implementation of Git written entirely in Java
-- [[http://eclipse.org/jgit]]
-
-#Create an empty commit with a commit message and Change-ID
-#
-# Repository repository = repoManager.openRepository(projectNameKey);
-# Ref ref = repository.getRef("master");
-# RevCommit commitAtRef = getCommitAtRef(repository, ref);
-# RevWalk revWalk = new RevWalk(repository);
-# ObjectInserter newObjectInserter = repository.newObjectInserter();
-# CommitBuilder builder = buildCommit(id, ref, commit);
-#
-# changeID = computeCommitHash(newObjectInserter, builder);
-# builder.setMessage(builder.getCommitMessage() + "\n\n" + "Change-Id: " + changeID);
-# repository.newObjectInserter().insert(builder);
 
 * Working with the Database
 
