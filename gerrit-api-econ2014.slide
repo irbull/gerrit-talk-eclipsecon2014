@@ -23,63 +23,86 @@ EclipseSource
 - Wikimedia
 - Chromium OS
 
+* A Tail of Two Systems
+- Eclipse uses Bugzilla to plan, *discuss*, *design* and *track* work items
+- Eclipse uses Gerrit to review, *discuss*, *design* and *track* patch-sets
+- Discussion is fragmented between these two systems
+
+Let's build a Gerrit extension to possibly integrate these two systems
+- Enter a Bug Number and automatically create an initial patch set with a reference to the bug
+- Extend this idea to create a _simple_ issue tracking system with Gerrit
+
 * Plugins and Extensions
 - Functionality can be *extended* by installing *plugins* and *extensions*
 - Plugins are tightly coupled with full access to all internals
 - Extensions have *limited* *visibility* to internals, *compatible* across a wider range of versions
 
-* A Tail of Two Work Item Trackers
-- Eclipse uses Bugzilla to plan, discuss, design and track work items
-- Eclipse uses Gerrit to review, discuss, design and track patch-sets
-- In many cases, the discussion is fragmented between these two systems
+*Two*APIs*
 
-We don't have any good answers, but we'll work through a plug-in that
-_might_ help.
-- We'll use this talk on the Gerrit API to design a Gerrit plugin that integrates buzilla with Gerrit.
-- In Gerrit, enter a Bug Number and it will automatically create an empty commit from which you can start working.
-
-* Two APIs
 - gerrit-extension-api.jar
 - gerrit-plugin-api.jar
 
-* Tools for Building Plugins
-Maven
-Buck
+ Tip: When building gerrit from master, install the API library in your local repository.
+  % buck build api
+  % buck build api_install
 
-- Install the API library into your local maven repository
- buck build api
- buck build api_install
-
-Eclipse
-
-- Eclipse project setup tool
- tools/eclipse/project.py
-
-Plugins directory is scanned and loaded (hot deploy)
+#* Tools for Building Plugins
+#Maven
+#Buck
+#- Install the API library into your local maven repository
+# buck build api
+# buck build api_install
+#Eclipse
+#
+#- Eclipse project setup tool
+# tools/eclipse/project.py
+#Plugins directory is scanned and loaded (hot deploy)
 
 * Anatomy of a Plugin
-- Manifest
-- API Type
-- Registration
-- Name
-- Reload Mode
-- Classpath
+
+.image images/gerrit-plugin-anatomy.png 500 800
 
 * Manifest
-- Manifest describes te content of the plug-in
-- Descriptive headers
-- API Type: If the tightly coupled 'plug-in' API is being used, it must be specified
-- Explicit module registration must be specified
-- Maven based builds can generate the manifest from description in the pom.xml
+Manifest describes the content of the plugin
+
+- *API*Type* must be specified (plugin or extension)
+- If modules are explicitly registered, they must be specified
+- Maven and Buck based builds will generate the Manifest for you
+ Manifest-Version: 1.0
+ Implementation-Title: plugin tutorial-plugin
+ Implementation-Version: 1.0-SNAPSHOT
+ Built-By: irbull
+ Created-By: Apache Maven 3.2.1
+ Implementation-URL: http://code.google.com/p/gerrit/
+ Gerrit-ApiVersion: 2.9-SNAPSHOT
+ Gerrit-HttpModule: com.googlesource.gerrit.plugins.tutorialplugin.HttpModule
+ Gerrit-ApiType: plugin
+ Implementation-Vendor: Gerrit Code Review
+ Gerrit-PluginName: tutorialPlugin
+ Build-Jdk: 1.7.0_25
+ Gerrit-Module: com.googlesource.gerrit.plugins.tutorialplugin.Module
+ Gerrit-SshModule: com.googlesource.gerrit.plugins.tutorialplugin.SshModule
+
+
 
 * Explicit Registration
-- Up to three modules can be registered in the manifest
+Up to three modules can be registered in the manifest
+
 - *Gerrit-Module*: Supplies bindings to the core server
 - *Gerrit-SshModule*: Supplies SSH Commands to the SSH server
 - *Gerrit-HttpModule*: Supplies servlets and filters to the HTTP Server
 
+
+* Classpath
+A few notes about Classpaths
+
+- Each plugin is loaded into its own Classloader
+- A Plugin inherits the Java Runtime and Gerrit API
+- Plugins are loaded from a single Jar, dependenies must be included, or placed in the libs/ directory
+
 * Extensions
 Supports a limited number of integration points
+
 - Limited interaction with Projects
 - Limited interaction with Reviews (changes)
 - Event listening
@@ -89,114 +112,258 @@ Supports a limited number of integration points
 
 * Your First Gerrit Extension
 - Use a Gerrit-Module to register the API
-- Create an instance of MessageOfTheDay and TopMenu to contribute extensions
-- Use _dependency_injection to get the Extension's name
+- Create an instance of MessageOfTheDay
+
  class Module extends AbstractModule {
-   @Override
    protected void configure() {
      DynamicSet.bind(binder(), MessageOfTheDay.class).to(EclipseConMessage.class);
-     DynamicSet.bind(binder(), TopMenu.class).to(EclipseConTopLevelMenu.class);
    }
  }
 
  public class EclipseConMessage extends MessageOfTheDay {
-
-  private String pluginName;
-
   @Inject
   public EclipseConMessage(@PluginName String pluginName) {
     this.pluginName = pluginName;
   }
-
-* Print the message
- @Override
- public String getHtmlMessage() {
-  StringBuilder result = new StringBuilder();
-  result.append("<H1>Welcome to EclipseCon 2014</H1>");
-  Date startTime = new Date(ManagementFactory.getRuntimeMXBean().getStartTime());
-  String prettyPrintedTime = new PrettyTime(new Date()).format(startTime);
-  result.append("The server was started about " + prettyPrintedTime + "<br>");
-  result.append("Contributed by <i>" + pluginName + "</i>.");
-  return result.toString();
+  public String getHtmlMessage() {
+    StringBuilder result = new StringBuilder();
+    result.append("<H1>Welcome to EclipseCon 2014</H1>");
+    Date startTime = new Date(ManagementFactory.getRuntimeMXBean().getStartTime());
+    String prettyPrintedTime = new PrettyTime(new Date()).format(startTime);
+    result.append(pluginName + " says the server was started " + prettyPrintedTime + "<br>");
+    return result.toString();
   }
  }
-
-
 
 * Deploy the Plug-in
 - Track problems by watching the logs in <gerrit_install>/logs directory
 - Copy the plugin to the <gerrit_install>/plugins directory
 - Copy the required libraries to the <gerrit_install>/libs directory
+- Deployed at [[http://localhost:7070/]]
 .image images/deploy0.png
 
 * Guice Dependency Injection
-- Gerrit uses Guice dependency injection
-- Most API types are accepted as parameters to your constructors
-- TODO: Tips for discovering and using dependency injection
+Gerrit uses Guice dependency injection
+Most API types are accepted as parameters to your constructors
 
-* HTTP Modules
-- Create a plugin that will list all the projects, and the number of open reviews against each
+- *@PluginName* Name of the plugin
+- *@CanonicalWebUrl*
+- *ReviewDB* Root entry to the Gerrit Database ORM
+- *GitRepositoryManager* Manages Git repositories for Gerrit
+- *IdentifiedUser* Currently authenticated user
 
+* Work Item Service
+Create a _Change_Request_ with an initial commit
 
-
-* SSH Modules
-- Plugins may provide commands that can be accessed via SSH
-- Register the commands using Guice or via a module
- $ ssh irbull@localhost -p 29418 tutorialPlugin uptime
-
-* Your First Gerrit Plug-in
-- Create a plugin that will print the uptime for the gerrit server over ssh
-- Use PrettyTime to pretty print the uptime
-
- @CommandMetaData(name = "uptime", description = "Print server uptime")
- public class PrintUptime extends SshCommand {
-   @Inject
-   PrintUptime() {
-   }
-   @Override
-   protected void run() {
-       Date startTime = new Date(ManagementFactory.getRuntimeMXBean().getStartTime());
-       String prettyPrintedTime = new PrettyTime(new Date()).format(startTime);
-       stdout.println("The Gerrit server started about " + prettyPrintedTime );
-   }
+- Create a service and bind it to its interface
+ public interface CreateWorkItemService {
+  public abstract Change createGerritWorkItem( String projectName,
+                                               String summary,
+                                               String description );
  }
 
-- Register the ssh command
-
- class SshModule extends PluginCommandModule {
+ class Module extends AbstractModule {
   @Override
-  protected void configureCommands() {
-    command(PrintUptime.class);
+  protected void configure() {
+    bind(CreateWorkItemService.class).to(CreateWorkItemImpl.class);
   }
  }
 
+* Working with JGit
+Gerrit uses JGit to interface with Git
 
-* Deploy the Plug-in
-- Track problems by watching the logs in <gerrit_install>/logs directory
-- Copy the plugin to the <gerrit_install>/plugins directory
-- Copy the required libraries to the <gerrit_install>/libs directory
-.image images/deploy1.png
+- JGit is an implementation of Git written entirely in Java
+- [[http://eclipse.org/jgit]]
+Create an empty commit with a commit message and Change-ID
 
+ Repository repository = repoManager.openRepository(projectNameKey);
+ Ref ref = repository.getRef("master");
+ RevCommit commitAtRef = getCommitAtRef(repository, ref);
+ RevWalk revWalk = new RevWalk(repository);
+ ObjectInserter newObjectInserter = repository.newObjectInserter();
+ CommitBuilder builder = buildCommit(id, ref, commit);
 
+ changeID = computeCommitHash(newObjectInserter, builder);
+ builder.setMessage(builder.getCommitMessage() + "\n\n" + "Change-Id: " + changeID);
+ repository.newObjectInserter().insert(builder);
 
+* Working with the Database
+
+Gerrit uses an ORM to integrate with its DB and maintains several tables
+
+- Accounts
+- Groups
+- Changes
+- Patch Sets
+
+ Change change = new Change(changeKey, id, currentUser.getAccountId(), dest, TimeUtil.nowTs());
+ change.setStatus(Status.NEW);
+ db.changes().beginTransaction(change.getId());
+ try {
+   .. <Insert patch sets and other data> ..
+   db.changes().insert(Collections.singleton(change));
+   db.commit();
+ } finally {
+   db.rollback();
+ }
+
+- For this particular use case, use ChangeInserter
+
+* Capabilities
+Plugins may provide their own capabilities and restrict use of commands to users who are granted those capabilities
+
+ public class CreateWorkItemCapability extends CapabilityDefinition {
+  @Override
+  public String getDescription() {
+    return "Can create a work item in gerrit";
+  }
+ }
+
+Capabilities are bound like other other services
+
+ class Module extends AbstractModule {
+  protected void configure() {
+     bind(CapabilityDefinition.class)
+    .annotatedWith(Exports.named("createWorkItem"))
+    .to(CreateWorkItemCapability.class);
+  }
+ }
+
+* SSH Modules
+- @CommandMetaData can be used to register the command
+- @Argument can be used to register arguments
+
+ @RequiresCapability("createWorkItem")
+ @CommandMetaData(name = "createChange", description = "Creates a new change")
+ public class CreateChange extends SshCommand {
+   @Argument(usage = "projectame", index = 0)
+   private String projectName = null;
+   @Argument(usage = "bugnumber", index = 1)
+   private String bugNumber = null;
+
+   protected void run() {
+     try {
+       .. <Validate arguments> ..
+       lookupBuzillaEntry( bugNumber );
+       Change workItem = createWork.createGerritWorkItem(projectName, summary, description);
+       stdout.println("Work item created at: " + canonicalWebUrl + workItem.getChangeId());
+     } catch (Exception e) {
+       throw new RuntimeException(e);
+     }
+   }
+
+* SSH Commands
+Plugins can provide commands that can be access via SSH
+
+- Register the command
+ class SshModule extends PluginCommandModule {
+   @Override
+   protected void configureCommands() {
+     command(PrintUptime.class);
+     command(CreateWorkItemSSHCmd.class);
+   }
+ }
+
+.image images/ssh-cmd.png 250 950
+
+* HTTP Modules
+Gerrit can register HTTP Extensions
+
+- Servlets
+- Javascript extensions
+- GWT Extensions
+ class HttpModule extends ServletModule {
+   @Override
+   protected void configureServlets() {
+     serve("/projects/*").with(ProjectListServlet.class);
+     DynamicSet.bind(binder(), WebUiPlugin.class)
+     .toInstance(new JavaScriptPlugin("create-item.js"));
+     DynamicSet.bind(binder(), WebUiPlugin.class)
+     .toInstance(new GwtPlugin("tutorialplugin"));
+   }
+ }
 
 * UI Extension
+Plugins can contribute UI extensions to core Gerrit pages.
+
 - Change Screen
 - Project Info Screen
 - Top Menu Extension
 - Add Your Own Screen
 - Setting Screen
 
-* Working with the DB
+Register the extension
 
-* JS API
+  install(new RestApiModule() {
+    @Override
+    protected void configure() {
+      post(PROJECT_KIND, "create-item").to(CreateWorkItemAction.class);
+    }
+  });
+
+* JS UI Extension
+Adds a "Create Work Item" action to the Projects page
+
+- create-item.js Supplies the UI Code for the action
+ Gerrit.install(function(self) {
+    function onCreateWorkItem(c) {
+      var f = c.textfield();
+      var b = c.button('Create', {onclick: function(){
+        c.call(
+          {bugnumber: f.value},
+          function(r) {
+            c.hide();
+            window.location.href=r;
+          });
+      }});
+      c.popup(c.div(
+        c.prependLabel('Eclipse Bug Number: ', f),
+        c.br(),
+        b));
+      f.focus();
+    }
+    self.onAction('project', 'create-item', onCreateWorkItem);
+  });
+
+* UI Extension
+UiAction and RestModifyView provide the server side integration
+
+ class CreateWorkItemAction implements UiAction<ProjectResource>,
+    RestModifyView<ProjectResource, CreateWorkItemAction.Input> {
+
+  public String apply(ProjectResource pr, Input input) {
+    lookupBuzillaEntry(input);
+    Change change = createWorkItem.createGerritWorkItem(pr.getName(), summary, description);
+    return canonicalWebUrl + change.getChangeId();
+  }
+
+  public Description getDescription(ProjectResource resource) {
+    return new Description().setLabel("Create work item")
+        .setTitle("Create work item on " + resource.getName())
+        .setVisible(user.get() instanceof IdentifiedUser);
+  }
+ }
+
+#.image images/projects-action.png 150 500
+[[http://localhost:7070/#/admin/projects/example-app]]
+
+* GWT Extensions
+UI Extensions can be written in GWT
+
+ DynamicSet.bind(binder(), WebUiPlugin.class)
+    .toInstance(new GwtPlugin("tutorialplugin"));
+
+Extend PluginEntryPoint and register your own screen
+
+ public class TutorialPlugin extends PluginEntryPoint {
+   @Override
+   public void onPluginLoad() {
+     Plugin.get().screen("", new IndexScreen.Factory());
+   }
+ }
+
+Available at [[http://localhost:7070/#/x/tutorialPlugin/][http://localhost:7070/#/x/<pluginName>/<path>]]
 
 * Events and Notifications
 
-* Pro Tips
-- Init Step
-- Configuration
--- Global or Private (own)
-- Capabilities
-- Remote debugging plugins (?)
-- Strategies for testing plugins (?)
+* Developer Tips
