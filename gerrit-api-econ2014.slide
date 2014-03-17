@@ -91,7 +91,7 @@ Manifest describes the content of the plugin
 Up to three modules can be registered in the manifest
 
 - *Gerrit-Module*: Supplies bindings to the core server
-- *Gerrit-SshModule*: Supplies SSH Commands to the SSH server
+- *Gerrit-SshModule*: Supplies SSH commands to the SSH server
 - *Gerrit-HttpModule*: Supplies servlets and filters to the HTTP Server
 
 
