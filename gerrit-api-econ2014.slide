@@ -302,16 +302,9 @@ Plugins can register HTTP extensions
    }
  }
 
-* UI Extension
-Plugins can contribute UI extensions to core Gerrit pages.
+* REST API Extension
 
-- Change Screen
-- Project Info Screen
-- Top Menu Extension
-- Add Your Own Screen
-- Setting Screen
-
-Register the extension
+Plugins can register REST API handlers:
 
   install(new RestApiModule() {
     @Override
@@ -319,6 +312,19 @@ Register the extension
       post(PROJECT_KIND, "create-item").to(CreateWorkItemAction.class);
     }
   });
+
+responds to
+
+  POST /projects/your-code/create-item HTTP/1.1
+  ...
+
+* UI Extension
+Plugins can contribute UI extensions to core Gerrit pages:
+
+- Change screen
+- Project info screen
+- Top menu extension
+- Add your own screen
 
 * JS UI Extension
 Adds a "Create Work Item" action to the Projects page
