@@ -71,6 +71,13 @@ Let's build a Gerrit extension to possibly integrate these two systems:
 
 .image images/gerrit-plugin-anatomy.png 500 800
 
+* Classpath
+
+- Each plugin is loaded into its own ClassLoader
+- Plugin inherits the Java Runtime and Gerrit API
+- Plugins are loaded from a single JAR
+- Dependencies must be included or placed in server's `libs/` directory
+
 * Manifest
 Manifest describes the content of the plugin
 
@@ -99,13 +106,6 @@ Up to three modules can be registered in the manifest
 - *Gerrit-SshModule*: Supplies SSH commands to the SSH server
 - *Gerrit-HttpModule*: Supplies servlets and filters to the HTTP Server
 
-
-* Classpath
-
-- Each plugin is loaded into its own ClassLoader
-- Plugin inherits the Java Runtime and Gerrit API
-- Plugins are loaded from a single JAR
-- Dependencies must be included or placed in server's `libs/` directory
 
 * Extensions
 Supports a limited number of integration points
