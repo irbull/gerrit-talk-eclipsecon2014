@@ -262,7 +262,7 @@ Plugins can register REST API handlers:
 
 responds to
 
-  POST /projects/your-code/create-item HTTP/1.1
+  POST /projects/example-app/exPlugin~create-item HTTP/1.1
   ...
 
 * UI Extension
