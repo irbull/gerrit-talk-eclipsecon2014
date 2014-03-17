@@ -1,5 +1,5 @@
 Extending Gerrit
-A Look at the Gerrit Plugin API
+A look at the Gerrit Plugin API
 
 Shawn Pearce
 Google
@@ -23,12 +23,13 @@ EclipseSource
 - Wikimedia
 - Chromium OS
 
-* A Tail of Two Systems
+* A Tale of Two Systems
 - Eclipse uses Bugzilla to plan, *discuss*, *design* and *track* work items
 - Eclipse uses Gerrit to review, *discuss*, *design* and *track* patch-sets
 - Discussion is fragmented between these two systems
 
-Let's build a Gerrit extension to possibly integrate these two systems
+Let's build a Gerrit extension to possibly integrate these two systems:
+
 - Enter a Bug Number and automatically create an initial patch set with a reference to the bug
 - Extend this idea to create a _simple_ issue tracking system with Gerrit
 
