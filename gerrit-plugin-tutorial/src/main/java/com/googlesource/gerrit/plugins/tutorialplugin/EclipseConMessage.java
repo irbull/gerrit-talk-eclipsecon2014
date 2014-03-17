@@ -24,8 +24,7 @@ public class EclipseConMessage extends MessageOfTheDay {
     result.append("<H1>Welcome to EclipseCon 2014</H1>");
     Date startTime = new Date(ManagementFactory.getRuntimeMXBean().getStartTime());
     String prettyPrintedTime = new PrettyTime(new Date()).format(startTime);
-    result.append("The server was started about " + prettyPrintedTime + "<br>");
-    result.append("Contributed by <i>" + pluginName + "</i>.");
+    result.append(pluginName + " says the server was started " + prettyPrintedTime + "<br>");
     return result.toString();
   }
 
