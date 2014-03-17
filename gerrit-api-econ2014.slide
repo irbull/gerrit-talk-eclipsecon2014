@@ -3,9 +3,11 @@ A Look at the Gerrit Plugin API
 
 Shawn Pearce
 Google
+sop@google.com
 
 Ian Bull
 EclipseSource
+irbull@eclipsesource.com
 
 * Gerrit Code Review
 
@@ -29,6 +31,7 @@ EclipseSource
 - Discussion is fragmented between these two systems
 
 Let's build a Gerrit extension to possibly integrate these two systems
+
 - Enter a Bug Number and automatically create an initial patch set with a reference to the bug
 - Extend this idea to create a _simple_ issue tracking system with Gerrit
 
@@ -42,7 +45,7 @@ Let's build a Gerrit extension to possibly integrate these two systems
 - gerrit-extension-api.jar
 - gerrit-plugin-api.jar
 
- Tip: When building gerrit from master, install the API library in your local repository.
+ Tip: When building Gerrit from master, install the API library in your local repository.
   % buck build api
   % buck build api_install
 
@@ -152,15 +155,27 @@ Most API types are accepted as parameters to your constructors
 - *GitRepositoryManager* Manages Git repositories for Gerrit
 - *IdentifiedUser* Currently authenticated user
 
+ public class CreateWorkItemImpl implements CreateWorkItemService {
+  @Inject
+  CreateWorkItemImpl(ReviewDb db,
+      final GitRepositoryManager repoManager,
+      ... ) {
+    this.db = db;
+    this.repoManager = repoManager
+  }
+ }
+
 * Work Item Service
 Create a _Change_Request_ with an initial commit
 
-- Create a service and bind it to its interface
+- Create a new service service
  public interface CreateWorkItemService {
   public abstract Change createGerritWorkItem( String projectName,
                                                String summary,
                                                String description );
  }
+
+- Bind the implementation
 
  class Module extends AbstractModule {
   @Override
@@ -215,7 +230,7 @@ Plugins may provide their own capabilities and restrict use of commands to users
  public class CreateWorkItemCapability extends CapabilityDefinition {
   @Override
   public String getDescription() {
-    return "Can create a work item in gerrit";
+    return "Can create a work item in Gerrit";
   }
  }
 
@@ -365,5 +380,43 @@ Extend PluginEntryPoint and register your own screen
 Available at [[http://localhost:7070/#/x/tutorialPlugin/][http://localhost:7070/#/x/<pluginName>/<path>]]
 
 * Events and Notifications
+Certain operations in Gerrit trigger events
+
+- *ChangeListener*: Listen to change events
+- *LifecycleListener*: Plugin start / stop
+- *NewProjectCreatedListener*: Project creation
+- *ProjectDeletedListener*: Project deletion
+- *HeadUpdatedListener*: Update HEAD on a project
+
+ DynamicSet.bind(binder(), ChangeListener.class).to(MyChangeListener.class);
+
+* ChangeListener
+
+Notify bugzilla whenever the Merge happens
+
+ public class MyChangeListener implements ChangeListener {
+
+  private static final String HTTPS_BUGS_ECLIPSE_ORG_0_9 = "(.*)https?://bugs.eclipse.org/[0-9]+/?(.*)";
+
+  @Override
+  public void onChangeEvent(ChangeEvent changeEvent) {
+    if ( changeEvent instanceof ChangeMergedEvent )  {
+      ChangeMergedEvent mergeEvent = ((ChangeMergedEvent) changeEvent);
+      ChangeAttribute change = mergeEvent.change;
+      String commitMessage = change.commitMessage;
+      if ( containsBugzillaReference(commitMessage)) {
+        notifyBugzilla(change);
+      }
+    }
+  }
 
 * Developer Tips
+Python script to create an Eclipse project for the Gerrit source
+
+ tools/eclipse/project.py
+
+Launch configurations for both the Gerrit Daemon and the GWT Debug
+
+- Point to an existing Gerrit application directory
+
+.image images/launch-config.png 300 750
