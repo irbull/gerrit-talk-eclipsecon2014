@@ -282,7 +282,7 @@ Plugins can provide commands that can be access via SSH
 .image images/ssh-cmd.png 250 950
 
 * HTTP Modules
-Gerrit can register HTTP Extensions
+Plugins can register HTTP extensions
 
 - Servlets
 - Javascript extensions
@@ -291,10 +291,12 @@ Gerrit can register HTTP Extensions
    @Override
    protected void configureServlets() {
      serve("/projects/*").with(ProjectListServlet.class);
+
      DynamicSet.bind(binder(), WebUiPlugin.class)
-     .toInstance(new JavaScriptPlugin("create-item.js"));
+       .toInstance(new JavaScriptPlugin("create-item.js"));
+
      DynamicSet.bind(binder(), WebUiPlugin.class)
-     .toInstance(new GwtPlugin("tutorialplugin"));
+       .toInstance(new GwtPlugin("tutorialplugin"));
    }
  }
 
