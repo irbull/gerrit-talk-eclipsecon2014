@@ -109,8 +109,8 @@ Supports a limited number of integration points
 - Limited interaction with Reviews (changes)
 - Event listening
 - Rest API
-- System Status
-- Basic UI integration (Top level menu, message of the day)
+- System status
+- Basic UI integration (top level menu, message of the day)
 
 * Your First Gerrit Extension
 - Use a Gerrit-Module to register the API
