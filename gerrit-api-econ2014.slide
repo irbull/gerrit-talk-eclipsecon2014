@@ -144,6 +144,8 @@ Supports a limited number of integration points
 - Deployed at [[http://localhost:7070/]]
 .image images/deploy0.png
 
+- Use `ssh`gerrit`plugin`install`-n`plugin`-`<target/plugin.jar`
+
 * Guice Dependency Injection
 Gerrit uses Guice dependency injection
 Most API types are accepted as parameters to your constructors
