@@ -190,26 +190,6 @@ Create a _Change_Request_ with an initial commit
   }
  }
 
-* Working with the Database
-
-Gerrit uses an ORM to integrate with its DB and maintains several tables
-
-- Accounts
-- Groups
-- Changes
-- Patch Sets
-
- Change change = new Change(changeKey, id, currentUser.getAccountId(), dest, TimeUtil.nowTs());
- change.setStatus(Status.NEW);
- db.changes().beginTransaction(change.getId());
- try {
-   .. <Insert patch sets and other data> ..
-   db.changes().insert(Collections.singleton(change));
-   db.commit();
- } finally {
-   db.rollback();
- }
-
 - For this particular use case, use ChangeInserter
 
 * Capabilities
