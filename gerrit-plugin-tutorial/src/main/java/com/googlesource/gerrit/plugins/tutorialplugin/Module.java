@@ -24,6 +24,7 @@ import com.google.gerrit.extensions.restapi.RestApiModule;
 import com.google.gerrit.extensions.systemstatus.MessageOfTheDay;
 import com.google.gerrit.extensions.webui.TopMenu;
 import com.google.inject.AbstractModule;
+import com.google.inject.name.Names;
 
 class Module extends AbstractModule {
 
@@ -31,7 +32,7 @@ class Module extends AbstractModule {
   protected void configure() {
     DynamicSet.bind(binder(), MessageOfTheDay.class).to(EclipseConMessage.class);
     DynamicSet.bind(binder(), TopMenu.class).to(EclipseConTopLevelMenu.class);
-    DynamicSet.bind(binder(), ChangeListener.class).to(MyChangeListener.class);
+    bind(ChangeListener.class).annotatedWith(Names.named("foo")).to(MyChangeListener.class);
     bind(CreateWorkItemService.class).to(CreateWorkItemImpl.class);
     install(new RestApiModule() {
       @Override

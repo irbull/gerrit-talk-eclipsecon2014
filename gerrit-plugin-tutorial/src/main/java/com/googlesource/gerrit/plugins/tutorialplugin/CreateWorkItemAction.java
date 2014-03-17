@@ -15,6 +15,7 @@
 package com.googlesource.gerrit.plugins.tutorialplugin;
 
 import com.google.gerrit.extensions.annotations.PluginName;
+import com.google.gerrit.extensions.annotations.RequiresCapability;
 import com.google.gerrit.extensions.restapi.RestModifyView;
 import com.google.gerrit.extensions.webui.UiAction;
 import com.google.gerrit.reviewdb.client.Change;
@@ -25,6 +26,7 @@ import com.google.gerrit.server.project.ProjectResource;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 
+@RequiresCapability("createWorkItem")
 class CreateWorkItemAction implements UiAction<ProjectResource>,
     RestModifyView<ProjectResource, CreateWorkItemAction.Input> {
 
@@ -54,7 +56,7 @@ class CreateWorkItemAction implements UiAction<ProjectResource>,
       lookupBuzillaEntry(input);
     }
     Change change = createWorkItemModule.createGerritWorkItem(rsrc.getName(), input.summary, input.description);
-    return canonicalWebUrl + change.getChangeId();
+     return canonicalWebUrl + change.getChangeId();
   }
 
   private void lookupBuzillaEntry(Input input) {

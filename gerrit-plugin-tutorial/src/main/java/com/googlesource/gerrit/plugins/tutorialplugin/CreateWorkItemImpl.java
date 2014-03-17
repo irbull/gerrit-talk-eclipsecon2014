@@ -36,7 +36,6 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Collections;
 
-@RequiresCapability("printHello")
 public class CreateWorkItemImpl implements CreateWorkItemService {
   private static final String REF_FOR_COMMIT = "refs/heads/master";
   private static final String BRANCH = "master";
@@ -54,7 +53,8 @@ public class CreateWorkItemImpl implements CreateWorkItemService {
   private String description;
 
   @Inject
-  CreateWorkItemImpl(ReviewDb db, final GitRepositoryManager repoManager,
+  CreateWorkItemImpl(ReviewDb db,
+      final GitRepositoryManager repoManager,
       ProjectCache projectCache,
       final ChangeInserter.Factory changeInserterFactory,
       IdentifiedUser currentUser  ) {
