@@ -32,7 +32,7 @@ irbull@eclipsesource.com
 
 Let's build a Gerrit extension to possibly integrate these two systems
 
-- Enter a Bug Number and automatically create an initial patch set with a reference to the bug
+- Create an initial patch sets from a bug number with a reference to the bug
 - Extend this idea to create a _simple_ issue tracking system with Gerrit
 
 * Plugins and Extensions
