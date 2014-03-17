@@ -286,7 +286,8 @@ Plugins can register HTTP extensions
 
 - Servlets
 - Javascript extensions
-- GWT Extensions
+- GWT (web UI) extensions
+
  class HttpModule extends ServletModule {
    @Override
    protected void configureServlets() {
