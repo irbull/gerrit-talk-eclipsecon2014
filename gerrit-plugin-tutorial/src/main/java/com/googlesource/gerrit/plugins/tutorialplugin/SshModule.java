@@ -18,10 +18,9 @@ import com.google.gerrit.sshd.PluginCommandModule;
 
 
 class SshModule extends PluginCommandModule {
-
   @Override
   protected void configureCommands() {
     command(PrintUptime.class);
-    command(CreateChange.class);
+    command(CreateWorkItemSSHCmd.class);
   }
 }
