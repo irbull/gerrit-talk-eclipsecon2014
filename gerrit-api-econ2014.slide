@@ -237,9 +237,9 @@ Capabilities are bound like other other services
 
  class Module extends AbstractModule {
   protected void configure() {
-     bind(CapabilityDefinition.class)
-    .annotatedWith(Exports.named("createWorkItem"))
-    .to(CreateWorkItemCapability.class);
+    bind(CapabilityDefinition.class)
+      .annotatedWith(Exports.named("createWorkItem"))
+      .to(CreateWorkItemCapability.class);
   }
  }
 
