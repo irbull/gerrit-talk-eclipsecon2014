@@ -171,27 +171,6 @@ Most API types are accepted as parameters to your constructors
   }
  }
 
-* Work Item Service
-Create a _Change_Request_ with an initial commit
-
-- Create a new service service
- public interface CreateWorkItemService {
-  public abstract Change createGerritWorkItem( String projectName,
-                                               String summary,
-                                               String description );
- }
-
-- Bind the implementation
-
- class Module extends AbstractModule {
-  @Override
-  protected void configure() {
-    bind(CreateWorkItemService.class).to(CreateWorkItemImpl.class);
-  }
- }
-
-- For this particular use case, use ChangeInserter
-
 * Capabilities
 Plugins may provide their own capabilities and restrict use of commands to users who are granted those capabilities
 
