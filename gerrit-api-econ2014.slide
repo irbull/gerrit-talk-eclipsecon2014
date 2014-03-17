@@ -188,18 +188,19 @@ Gerrit uses JGit to interface with Git
 
 - JGit is an implementation of Git written entirely in Java
 - [[http://eclipse.org/jgit]]
-Create an empty commit with a commit message and Change-ID
 
- Repository repository = repoManager.openRepository(projectNameKey);
- Ref ref = repository.getRef("master");
- RevCommit commitAtRef = getCommitAtRef(repository, ref);
- RevWalk revWalk = new RevWalk(repository);
- ObjectInserter newObjectInserter = repository.newObjectInserter();
- CommitBuilder builder = buildCommit(id, ref, commit);
-
- changeID = computeCommitHash(newObjectInserter, builder);
- builder.setMessage(builder.getCommitMessage() + "\n\n" + "Change-Id: " + changeID);
- repository.newObjectInserter().insert(builder);
+#Create an empty commit with a commit message and Change-ID
+#
+# Repository repository = repoManager.openRepository(projectNameKey);
+# Ref ref = repository.getRef("master");
+# RevCommit commitAtRef = getCommitAtRef(repository, ref);
+# RevWalk revWalk = new RevWalk(repository);
+# ObjectInserter newObjectInserter = repository.newObjectInserter();
+# CommitBuilder builder = buildCommit(id, ref, commit);
+#
+# changeID = computeCommitHash(newObjectInserter, builder);
+# builder.setMessage(builder.getCommitMessage() + "\n\n" + "Change-Id: " + changeID);
+# repository.newObjectInserter().insert(builder);
 
 * Working with the Database
 
