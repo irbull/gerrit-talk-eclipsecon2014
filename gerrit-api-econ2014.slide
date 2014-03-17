@@ -355,6 +355,7 @@ Adds a "Create Work Item" action to the Projects page
 * UI Extension
 UiAction and RestModifyView provide the server side integration
 
+ @RequiresCapability("createWorkItem")
  class CreateWorkItemAction implements UiAction<ProjectResource>,
     RestModifyView<ProjectResource, CreateWorkItemAction.Input> {
 
