@@ -243,17 +243,18 @@ Capabilities are bound like other other services
   }
  }
 
-* SSH Modules
+* SSH Commands
 - @CommandMetaData can be used to register the command
 - @Argument can be used to register arguments
 
  @RequiresCapability("createWorkItem")
  @CommandMetaData(name = "createChange", description = "Creates a new change")
  public class CreateChange extends SshCommand {
-   @Argument(usage = "projectame", index = 0)
-   private String projectName = null;
+   @Argument(usage = "projectname", index = 0)
+   private String projectName;
+
    @Argument(usage = "bugnumber", index = 1)
-   private String bugNumber = null;
+   private String bugNumber;
 
    protected void run() {
      try {
@@ -262,7 +263,7 @@ Capabilities are bound like other other services
        Change workItem = createWork.createGerritWorkItem(projectName, summary, description);
        stdout.println("Work item created at: " + canonicalWebUrl + workItem.getChangeId());
      } catch (Exception e) {
-       throw new RuntimeException(e);
+       throw die("cannot create work item");
      }
    }
 
