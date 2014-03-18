@@ -349,7 +349,7 @@ Certain operations in Gerrit trigger events
 * Developer Tips
 Python script to create an Eclipse project for the Gerrit source
 
- tools/eclipse/project.py
+ tools/eclipse/project.py --src
 
 Launch configurations for both the Gerrit Daemon and the GWT Debug
 
