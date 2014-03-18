@@ -346,8 +346,7 @@ Certain operations in Gerrit trigger events
 - *ProjectDeletedListener*: Project deletion
 - *HeadUpdatedListener*: Update HEAD on a project
 
- DynamicSet.bind(binder(), ChangeListener.class).to(MyChangeListener.class);
-
+ bind(ChangeListener.class).annotatedWith(Names.named("MCL")).to(MyChangeListener.class);
 * ChangeListener
 
 Notify bugzilla whenever the Merge happens
