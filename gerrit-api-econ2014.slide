@@ -237,10 +237,12 @@ Plugins can register HTTP extensions
    protected void configureServlets() {
      serve("/projects/*").with(ProjectListServlet.class);
 
-     DynamicSet.bind(binder(), WebUiPlugin.class)
+     bind(WebUiPlugin.class)
+       .annotatedWith(Names.named("create-item"))
        .toInstance(new JavaScriptPlugin("create-item.js"));
 
-     DynamicSet.bind(binder(), WebUiPlugin.class)
+     bind(WebUiPlugin.class)
+       .annotatedWith(Names.named("tutorial-ui"))
        .toInstance(new GwtPlugin("tutorialplugin"));
    }
  }
