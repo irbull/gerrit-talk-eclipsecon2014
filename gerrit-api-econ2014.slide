@@ -177,7 +177,7 @@ Plugins may provide their own capabilities and restrict use of commands to users
   }
  }
 
-Capabilities are bound like other other services
+Capabilities are bound like other services
 
  class Module extends AbstractModule {
   protected void configure() {
