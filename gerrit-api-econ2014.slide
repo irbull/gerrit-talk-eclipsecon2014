@@ -212,7 +212,7 @@ Capabilities are bound like other services
    }
 
 * SSH Commands
-Plugins can provide commands that can be access via SSH
+Plugins can provide commands accessed over SSH
 
 - Register the command
  class SshModule extends PluginCommandModule {
