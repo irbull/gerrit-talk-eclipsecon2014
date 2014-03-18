@@ -19,11 +19,7 @@ irbull@eclipsesource.com
 - Simplifies project management by allowing authorized users to submit changes to the master branch
 
 * Gerrit in the wild
-- Android
-- Eclipse
-- LibreOffice
-- Wikimedia
-- Chromium OS
+.image images/logos.png
 
 Gerrit uses JGit to interface with Git
 
