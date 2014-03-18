@@ -238,11 +238,11 @@ Plugins can register HTTP extensions
      serve("/projects/*").with(ProjectListServlet.class);
 
      bind(WebUiPlugin.class)
-       .annotatedWith(Names.named("create-item"))
+       .annotatedWith(Names.named("create-item"))            // keep stable
        .toInstance(new JavaScriptPlugin("create-item.js"));
 
      bind(WebUiPlugin.class)
-       .annotatedWith(Names.named("tutorial-ui"))
+       .annotatedWith(Names.named("tutorial-ui"))            // keep stable
        .toInstance(new GwtPlugin("tutorialplugin"));
    }
  }
