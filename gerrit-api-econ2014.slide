@@ -161,9 +161,9 @@ Most API types are accepted as parameters to your constructors
 
  public class CreateWorkItemImpl {
   @Inject
-  CreateWorkItemImpl(ReviewDb db,
-      GitRepositoryManager repoManager,
-      ... ) {
+  CreateWorkItemImpl( ReviewDb db,
+                      GitRepositoryManager repoManager,
+                      ... ) {
     this.db = db;
     this.repoManager = repoManager
   }
