@@ -147,6 +147,8 @@ Supports a limited number of integration points
 
 - Use `ssh`gerrit`plugin`install`-n`plugin`-`<target/plugin.jar`
 
+[[http://localhost:7070/#/][http://localhost:7070/#/]]
+
 * Guice Dependency Injection
 Gerrit uses Guice dependency injection
 Most API types are accepted as parameters to your constructors
