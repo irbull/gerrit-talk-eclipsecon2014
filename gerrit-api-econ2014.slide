@@ -24,7 +24,7 @@ irbull@eclipsesource.com
 Gerrit uses JGit to interface with Git
 
 - JGit is an implementation of Git written entirely in Java
-- [[http://eclipse.org/jgit]]
+- [[http://eclipse.org/jgit][http://eclipse.org/jgit]]
 
 * A Tale of Two Systems
 - Eclipse uses Bugzilla to plan, *discuss*, *design* and *track* work items
@@ -317,7 +317,7 @@ UiAction and RestModifyView provide the server side integration
  }
 
 #.image images/projects-action.png 150 500
-[[http://localhost:7070/#/admin/projects/example-app]]
+[[http://localhost:7070/#/admin/projects/example-app][http://localhost:7070/#/admin/projects/example-app]]
 
 * GWT Extensions
 UI Extensions can be written in GWT
@@ -364,4 +364,4 @@ Launch configurations for both the Gerrit Daemon and the GWT Debug
 
 .image images/vote.png 500 800
 
-[[https://github.com/irbull/gerrit-talk-eclipsecon2014]]
+[[https://github.com/irbull/gerrit-talk-eclipsecon2014][https://github.com/irbull/gerrit-talk-eclipsecon2014]]
