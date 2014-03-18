@@ -70,6 +70,16 @@ Gerrit is moving to Buck as it's build tool of choice
 # tools/eclipse/project.py
 #Plugins directory is scanned and loaded (hot deploy)
 
+
+* Extensions
+Supports a limited number of integration points
+
+- Limited interaction with Projects
+- Limited interaction with Reviews (changes)
+- Event listening
+- Rest API
+- System status
+- Basic UI integration (top level menu, message of the day)
 * Anatomy of a Plugin
 
 .image images/gerrit-plugin-anatomy.png 500 800
@@ -110,15 +120,7 @@ Manifest describes the content of the plugin
 #- *Gerrit-HttpModule*: Supplies servlets and filters to the HTTP Server
 
 
-* Extensions
-Supports a limited number of integration points
 
-- Limited interaction with Projects
-- Limited interaction with Reviews (changes)
-- Event listening
-- Rest API
-- System status
-- Basic UI integration (top level menu, message of the day)
 
 * Your First Gerrit Extension
 - Use a Gerrit-Module to register the API
