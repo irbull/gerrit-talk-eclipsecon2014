@@ -142,12 +142,11 @@ Supports a limited number of integration points
 - Track problems by watching the logs in <gerrit_install>/logs directory
 - Copy the plugin to the <gerrit_install>/plugins directory
 - Copy the required libraries to the <gerrit_install>/libs directory
-- Deployed at [[http://localhost:7070/]]
 .image images/deploy0.png
 
 - Use `ssh`gerrit`plugin`install`-n`plugin`-`<target/plugin.jar`
 
-[[http://localhost:7070/#/][http://localhost:7070/#/]]
+- Deployed at [[http://localhost:7070/#/][http://localhost:7070/#/]]
 
 * Guice Dependency Injection
 Gerrit uses Guice dependency injection
