@@ -373,3 +373,9 @@ Launch configurations for both the Gerrit Daemon and the GWT Debug
 - Point to an existing Gerrit application directory
 
 .image images/launch-config.png 300 750
+
+* Thank-you
+
+.image images/vote.png 500 800
+
+[[https://github.com/irbull/gerrit-talk-eclipsecon2014]]
