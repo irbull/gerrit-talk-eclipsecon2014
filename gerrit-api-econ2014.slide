@@ -336,13 +336,15 @@ Available at [[http://localhost:7070/#/x/tutorialPlugin/][http://localhost:7070/
 * Events and Notifications
 Certain operations in Gerrit trigger events
 
-- *ChangeListener*: Listen to change events
 - *LifecycleListener*: Plugin start / stop
+- *ChangeListener*: Listen to change events
 - *NewProjectCreatedListener*: Project creation
 - *ProjectDeletedListener*: Project deletion
 - *HeadUpdatedListener*: Update HEAD on a project
 
- bind(ChangeListener.class).annotatedWith(Names.named("MCL")).to(MyChangeListener.class);
+ bind(LifecycleListener.class)
+   .annotatedWith(Names.named("start-stop"))
+   .to(MyStartStopListener.class);
 
 * Developer Tips
 Python script to create an Eclipse project for the Gerrit source
