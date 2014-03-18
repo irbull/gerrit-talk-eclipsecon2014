@@ -47,9 +47,16 @@ Let's build a Gerrit extension to possibly integrate these two systems:
 - gerrit-extension-api.jar
 - gerrit-plugin-api.jar
 
- Tip: When building Gerrit from master, install the API library in your local repository.
-  % buck build api
-  % buck build api_install
+ mvn archetype:generate -DarchetypeGroupId=com.google.gerrit \
+    -DarchetypeArtifactId=gerrit-plugin-archetype \
+    -DarchetypeVersion=2.9-SNAPSHOT \
+    -DgroupId=com.googlesource.gerrit.plugins.testplugin \
+    -DartifactId=testplugin
+# Tip: When building Gerrit from master, install the API library in your local repository.
+#  % buck build api
+#  % buck build api_install
+
+Gerrit is moving to Buck as it's build tool of choice
 
 #* Tools for Building Plugins
 #Maven
@@ -78,7 +85,7 @@ Let's build a Gerrit extension to possibly integrate these two systems:
 Manifest describes the content of the plugin
 
 - *API*Type* must be specified (plugin or extension)
-- If modules are explicitly registered, they must be specified
+- 3 modules can be explicitly registered (*Core*, *SSH*Commands*, *Servlets*&* *HTTP*)
 - Maven and Buck based builds will generate the Manifest for you
  Manifest-Version: 1.0
 
@@ -95,12 +102,12 @@ Manifest describes the content of the plugin
  Gerrit-HttpModule: com.googlesource.gerrit.plugins.tutorialplugin.HttpModule
  Gerrit-SshModule: com.googlesource.gerrit.plugins.tutorialplugin.SshModule
 
-* Explicit Registration
-Up to three modules can be registered in the manifest
+#* Explicit Registration
+#Up to three modules can be registered in the manifest
 
-- *Gerrit-Module*: Supplies bindings to the core server
-- *Gerrit-SshModule*: Supplies SSH commands to the SSH server
-- *Gerrit-HttpModule*: Supplies servlets and filters to the HTTP Server
+#- *Gerrit-Module*: Supplies bindings to the core server
+#- *Gerrit-SshModule*: Supplies SSH commands to the SSH server
+#- *Gerrit-HttpModule*: Supplies servlets and filters to the HTTP Server
 
 
 * Extensions
