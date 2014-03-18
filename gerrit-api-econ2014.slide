@@ -343,25 +343,6 @@ Certain operations in Gerrit trigger events
 - *HeadUpdatedListener*: Update HEAD on a project
 
  bind(ChangeListener.class).annotatedWith(Names.named("MCL")).to(MyChangeListener.class);
-* ChangeListener
-
-Notify bugzilla whenever the Merge happens
-
- public class MyChangeListener implements ChangeListener {
-
-  private static final String HTTPS_BUGS_ECLIPSE_ORG_0_9 = "(.*)https?://bugs.eclipse.org/[0-9]+/?(.*)";
-
-  @Override
-  public void onChangeEvent(ChangeEvent changeEvent) {
-    if ( changeEvent instanceof ChangeMergedEvent )  {
-      ChangeMergedEvent mergeEvent = ((ChangeMergedEvent) changeEvent);
-      ChangeAttribute change = mergeEvent.change;
-      String commitMessage = change.commitMessage;
-      if ( containsBugzillaReference(commitMessage)) {
-        notifyBugzilla(change);
-      }
-    }
-  }
 
 * Developer Tips
 Python script to create an Eclipse project for the Gerrit source
